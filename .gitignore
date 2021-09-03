@@ -1,0 +1,17 @@
+/target
+/Cargo.lock
+
+run.cgi
+
+*.swp*
+*.nfs*
+*~
+*.~*
+*.tmp
+*.old
+*.bak
+*.orig
+*.pid
+
+.*
+!.git*

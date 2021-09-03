@@ -1,0 +1,19 @@
+[package]
+name = "convert-js"
+version = "0.1.0"
+edition = "2018"
+authors = ["René Kijewski <rene.[SURNAME]@fu-berlin.de>"]
+license = "ISC OR MIT OR Apache-2.0"
+description = "TODO"
+homepage = "https://github.com/Kijewski/convert-js"
+repository = "https://github.com/Kijewski/convert-js"
+categories = ["TODO"]
+keywords = ["TODO"]
+readme = "README.md"
+
+[lib]
+name = "convert_js"
+
+[dependencies]
+convert-js-impl = { version = "0.1.0", path = "../convert-js-impl" }
+convert-js-macros = { version = "0.1.0", path = "../convert-js-macros" }
