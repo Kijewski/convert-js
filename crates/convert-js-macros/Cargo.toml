@@ -16,5 +16,8 @@ name = "convert_js_macros"
 proc-macro = true
 
 [dependencies]
+base64 = "0.13"
+blake2 = "0.9"
 convert-js-impl = { version = "0.1.0", path = "../convert-js-impl" }
+fd-lock = "3"
 litrs = "0.2"
