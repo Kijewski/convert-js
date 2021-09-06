@@ -15,8 +15,7 @@
 //! TODO: doc
 
 use std::convert::TryFrom;
-use std::env::var;
-use std::fs::{OpenOptions, create_dir_all, remove_file};
+use std::fs::{create_dir_all, remove_file, OpenOptions};
 use std::io::{Read, Write};
 use std::path::Path;
 
@@ -58,24 +57,25 @@ pub fn convert_js(arg: TokenStream) -> TokenStream {
     let (a, b) = hash.split_at(4);
     let (b, c) = b.split_at(4);
 
-    let tmpdir = match var("CARGO_TARGET_TMPDIR") {
-        Ok(tmpdir) => tmpdir,
-        _ => return compile_error("Environment variable CARGO_TARGET_TMPDIR is not set."),
-    };
-    let cachefile = Path::new(&tmpdir).join(format!("convert-js/{}/{}/{}", a, b, c));
+    let cachedir = env!("convert-js-macros-cache");
+    let cachefile = Path::new(cachedir).join(format!("{}/{}/{}", a, b, c));
     if let Err(err) = create_dir_all(cachefile.parent().unwrap()) {
         dbg!(err);
-        return compile_error(&format!("Could not create tempdir."));
+        return compile_error("Could not create cachedir.");
     }
 
     for _ in 0..10 {
         match OpenOptions::new().read(true).open(&cachefile) {
             Err(_) => match {
-                OpenOptions::new().create(true).create_new(true).write(true).open(&cachefile)
-             } {
+                OpenOptions::new()
+                    .create(true)
+                    .create_new(true)
+                    .write(true)
+                    .open(&cachefile)
+            } {
                 Err(err) => {
                     dbg!(err);
-                    continue
+                    continue;
                 }
                 Ok(file) => {
                     let mut file = RwLock::new(file);
@@ -99,7 +99,7 @@ pub fn convert_js(arg: TokenStream) -> TokenStream {
                         Err(err) => {
                             dbg!(err);
                             let _ = remove_file(&cachefile);
-                            return compile_error(&format!("Could not write cache file."));
+                            return compile_error("Could not write cache file.");
                         }
                     }
                 }
@@ -110,14 +110,14 @@ pub fn convert_js(arg: TokenStream) -> TokenStream {
                 let mut file = match file.write() {
                     Err(err) => {
                         dbg!(err);
-                        continue
+                        continue;
                     }
                     Ok(file) => file,
                 };
                 match file.read_to_string(&mut converted) {
                     Err(err) => {
                         dbg!(err);
-                        continue
+                        continue;
                     }
                     Ok(_) => return token_stream(converted),
                 }
