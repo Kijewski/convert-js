@@ -91,6 +91,7 @@ pub fn convert_js(arg: TokenStream) -> TokenStream {
                         Ok(converted) => converted,
                         Err(err) => {
                             dbg!(err);
+                            let _ = remove_file(&cachefile);
                             return compile_error("Could not convert JavaScript code.");
                         }
                     };
