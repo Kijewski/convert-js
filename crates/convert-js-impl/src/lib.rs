@@ -22,7 +22,7 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 
 use is_executable::is_executable;
-use tempdir::TempDir;
+use tempfile::TempDir;
 use thiserror::Error;
 use which::which;
 
@@ -164,8 +164,8 @@ pub fn convert_js(js_code: impl AsRef<[u8]>) -> Result<String> {
     run(cmd)?;
 
     let tempdir = match var("CARGO_TARGET_TMPDIR") {
-        Ok(tempdir) => TempDir::new_in(tempdir, "convert-js"),
-        Err(_) => TempDir::new("convert-js"),
+        Ok(tempdir) => TempDir::new_in(tempdir),
+        Err(_) => TempDir::new(),
     };
     let tempdir = tempdir.expect("Could not create temp dir");
 

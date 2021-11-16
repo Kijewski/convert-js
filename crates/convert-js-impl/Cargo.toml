@@ -16,6 +16,6 @@ name = "convert_js_impl"
 
 [dependencies]
 is_executable = "1"
-tempdir = "0.3"
+tempfile = "3"
 thiserror = "1"
 which = "4"
