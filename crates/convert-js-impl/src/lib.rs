@@ -26,13 +26,8 @@ use tempfile::TempDir;
 use thiserror::Error;
 use which::which;
 
-mod private {
-    #[derive(Debug, Copy, Clone, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct Unit();
-}
-
 /// TODO: doc
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Exit {
     /// TODO: doc
     Code(i32),
@@ -44,6 +39,7 @@ pub enum Exit {
 
 /// TODO: doc
 #[derive(Debug, Error)]
+#[non_exhaustive]
 pub enum Error {
     /// TODO: doc
     #[error("yarn needs to be installed")]
@@ -64,7 +60,7 @@ pub enum Error {
     },
 
     /// TODO: doc
-    #[error(r#"IO error while reading converting file"#)]
+    #[error("IO error while reading converting file")]
     IoError {
         /// TODO: doc
         #[source]
@@ -83,14 +79,10 @@ pub enum Error {
     /// TODO: doc
     #[error(r#"Crate "convert-js-impl" is located in a non-UTF-8 path"#)]
     NonUTF8Installation,
-
-    #[doc(hidden)]
-    #[error("...")]
-    _NonExhausive(private::Unit),
 }
 
 /// TODO: doc
-pub type Result<T = String, E = Error> = std::result::Result<T, E>;
+pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 const COMPRESS_OPTIONS: &str = "\
 drop_console=false,\
