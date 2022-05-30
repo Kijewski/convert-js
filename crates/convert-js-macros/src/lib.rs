@@ -57,7 +57,7 @@ pub fn convert_js(arg: TokenStream) -> TokenStream {
     let (a, b) = hash.split_at(4);
     let (b, c) = b.split_at(4);
 
-    let cachedir = env!("convert-js-macros-cache");
+    let cachedir = env!("CONVERT_JS_MACROS_CACHE");
     let cachefile = Path::new(cachedir).join(format!("{}/{}/{}", a, b, c));
     if let Err(err) = create_dir_all(cachefile.parent().unwrap()) {
         dbg!(err);
